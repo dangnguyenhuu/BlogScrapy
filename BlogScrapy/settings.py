@@ -15,6 +15,12 @@ SPIDER_MODULES = ['BlogScrapy.spiders']
 NEWSPIDER_MODULE = 'BlogScrapy.spiders'
 
 
+FEED_EXPORTERS = {
+    'nejl': 'BlogScrapy.exporters.NonEscapeJsonLinesItemExporter',
+    'nejsonlines': 'BlogScrapy.exporters.NonEscapeJsonLinesItemExporter',
+}
+
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'BlogScrapy (+http://www.yourdomain.com)'
 
