@@ -9,6 +9,5 @@ import scrapy
 
 
 class BlogscrapyItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    title = scrapy.Field()
+    links = scrapy.Field()
