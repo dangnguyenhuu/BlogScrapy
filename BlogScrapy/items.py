@@ -11,3 +11,9 @@ import scrapy
 class BlogscrapyItem(scrapy.Item):
     title = scrapy.Field()
     links = scrapy.Field()
+    pass
+
+class BikaeItem(scrapy.Item):
+    title = scrapy.Field()
+    links = scrapy.Field()
+    pass

@@ -21,6 +21,7 @@ class MyblogSpider(scrapy.Spider):
 
             try:
                 post_id = path_segments[2]
+                print("####Request####{}".format_map(post_id))
                 spider = BlogscrapyItem(post_id) # 記事の ID を指定して個別のポストを処理する Spider を生成する
                 req = scrapy.Request(url=post_url, callback=spider.parse) # リクエストを処理するコールバックに上記の Spider のメソッドを指定する
                 yield req

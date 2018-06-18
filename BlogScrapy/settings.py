@@ -9,6 +9,8 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+
+
 BOT_NAME = 'BlogScrapy'
 
 SPIDER_MODULES = ['BlogScrapy.spiders']
@@ -37,7 +39,9 @@ ROBOTSTXT_OBEY = True
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
-
+DOWNLOAD_DELAY = 3
+ROBOTSTXT_OBEY = True
+DEPTH_LIMIT = 5
 # Disable cookies (enabled by default)
 #COOKIES_ENABLED = False
 
