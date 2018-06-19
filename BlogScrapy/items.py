@@ -13,6 +13,8 @@ class BlogscrapyItem(scrapy.Item):
     links = scrapy.Field()
     pass
 
+
+
 class BikaeItem(scrapy.Item):
     title = scrapy.Field()
     links = scrapy.Field()

@@ -20,9 +20,27 @@ class BikaeSpider(scrapy.Spider):
 
         soup = BeautifulSoup(response.body, "lxml")
 
-        item = BikaeItem()
-        item['links'] = response.url
-        # ページのどの部分をスクレイプするかを指定
-        # xPath形式での指定に加え、CSS形式での指定も可能
-        item['title'] = soup.head.title.string
-        return item
+        for a in soup.find_all('article'):
+            try:
+                item = BikaeItem()
+                item['links'] = a.select("div.entry-header > h1 > a")[0].get('href')
+                item['title'] = a.select("div.entry-header > h1 > a")[0].string
+                item['thumbnail'] = 
+                yield item
+            except:
+                yield
+
+            # print(a.select("div.entry-header > h1 > a")[0].string)  # Title
+            # print(a.select("div.entry-header > h1 > a")[0].get('href'))  # Url
+            # print(a.select("div.entry-summary > div.toppage-post-feature-img > a > img")[0].get('src'))  # Thumbnail
+            # print(a.select("div.entry-summary > div.toppage-post-excerpt > div")[0].string)  # Des
+
+        # 次のページのリンクを抜き出してたどる
+        item2 = soup.select("li.swipe-menu-item > a.title")
+        for it in item2:
+            url = it.get("href")
+            parse_result = parse.urlparse(url).path.split('/')
+            if len(parse_result) > 2:
+                yield response.follow(url, self.parse)
+            else:
+                yield
