@@ -19,4 +19,5 @@ class BikaeItem(scrapy.Item):
     title = scrapy.Field()
     links = scrapy.Field()
     thumbnail = scrapy.Field()
+    description = scrapy.Field()
     pass

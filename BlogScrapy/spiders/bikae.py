@@ -5,6 +5,8 @@ from scrapy.contrib.linkextractors import LinkExtractor
 from BlogScrapy.items import BikaeItem
 from bs4 import BeautifulSoup
 from urllib import parse
+import xml.etree.ElementTree
+
 
 
 
@@ -40,6 +42,9 @@ class MyblogPostSpider(scrapy.Spider):
         super(MyblogPostSpider, self).__init__(*args, **kwargs)
         self.start_urls = [url]
 
+    def remove_tags(text):
+        return ''.join(xml.etree.ElementTree.fromstring(text).itertext())
+
     def parse(self, response):
         soup = BeautifulSoup(response.body, "lxml")
 
@@ -49,7 +54,14 @@ class MyblogPostSpider(scrapy.Spider):
                 item['links'] = a.select("div.entry-header > h1 > a")[0].get('href')
                 item['title'] = a.select("div.entry-header > h1 > a")[0].string
                 item['thumbnail'] = a.select("div.entry-summary > div.toppage-post-feature-img > a > img")[0].get('src')
+                item['description'] = self.remove_tags(str(a.select("div.entry-summary > div.toppage-post-excerpt > div")[0])).replace("Xem chi tiết ", "")
                 yield item
+            except:
+                yield
+
+            try:
+                nextUrl = soup.select("div.nav-links > div.nav-next > a")[0].get('href')
+                yield scrapy.Request(nextUrl, callback=self.parse)
             except:
                 yield
 
