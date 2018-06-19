@@ -20,12 +20,35 @@ class BikaeSpider(scrapy.Spider):
 
         soup = BeautifulSoup(response.body, "lxml")
 
+        categories = soup.select("li.swipe-menu-item > a.title")
+        for category in categories:
+            url = category.get("href")
+            parse_result = parse.urlparse(url).path.split('/')
+            if len(parse_result) > 2:
+                spider = MyblogPostSpider(url)
+                req = scrapy.Request(url=url, callback=spider.parse)
+                yield req
+            else:
+                yield
+
+
+class MyblogPostSpider(scrapy.Spider):
+    name = 'bikaepost'
+    allowed_domains = ['bikae.net']
+
+    def __init__(self, url, *args, **kwargs):
+        super(MyblogPostSpider, self).__init__(*args, **kwargs)
+        self.start_urls = [url]
+
+    def parse(self, response):
+        soup = BeautifulSoup(response.body, "lxml")
+
         for a in soup.find_all('article'):
             try:
                 item = BikaeItem()
                 item['links'] = a.select("div.entry-header > h1 > a")[0].get('href')
                 item['title'] = a.select("div.entry-header > h1 > a")[0].string
-                item['thumbnail'] = 
+                item['thumbnail'] = a.select("div.entry-summary > div.toppage-post-feature-img > a > img")[0].get('src')
                 yield item
             except:
                 yield
@@ -34,13 +57,3 @@ class BikaeSpider(scrapy.Spider):
             # print(a.select("div.entry-header > h1 > a")[0].get('href'))  # Url
             # print(a.select("div.entry-summary > div.toppage-post-feature-img > a > img")[0].get('src'))  # Thumbnail
             # print(a.select("div.entry-summary > div.toppage-post-excerpt > div")[0].string)  # Des
-
-        # 次のページのリンクを抜き出してたどる
-        item2 = soup.select("li.swipe-menu-item > a.title")
-        for it in item2:
-            url = it.get("href")
-            parse_result = parse.urlparse(url).path.split('/')
-            if len(parse_result) > 2:
-                yield response.follow(url, self.parse)
-            else:
-                yield
