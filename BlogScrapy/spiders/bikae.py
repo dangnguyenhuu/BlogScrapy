@@ -42,7 +42,8 @@ class MyblogPostSpider(scrapy.Spider):
         super(MyblogPostSpider, self).__init__(*args, **kwargs)
         self.start_urls = [url]
 
-    def remove_tags(text):
+    @classmethod
+    def remove_tags(cls, text):
         return ''.join(xml.etree.ElementTree.fromstring(text).itertext())
 
     def parse(self, response):
@@ -54,9 +55,12 @@ class MyblogPostSpider(scrapy.Spider):
                 item['links'] = a.select("div.entry-header > h1 > a")[0].get('href')
                 item['title'] = a.select("div.entry-header > h1 > a")[0].string
                 item['thumbnail'] = a.select("div.entry-summary > div.toppage-post-feature-img > a > img")[0].get('src')
-                item['description'] = self.remove_tags(str(a.select("div.entry-summary > div.toppage-post-excerpt > div")[0])).replace("Xem chi tiết ", "")
+                desStr = str(a.select("div.entry-summary > div.toppage-post-excerpt > div")[0])
+                item['description'] = self.remove_tags(desStr).replace('Xem chi tiết ', '')
+                # item['description'] = str(a.select("div.entry-summary > div.toppage-post-excerpt > div")[0])
                 yield item
-            except:
+            except Exception as ex:
+                print("ERROR ---->>>>>>> {}".format(ex))
                 yield
 
             try:
