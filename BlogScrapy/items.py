@@ -21,3 +21,10 @@ class BikaeItem(scrapy.Item):
     thumbnail = scrapy.Field()
     description = scrapy.Field()
     pass
+
+
+class ImageItem(scrapy.Item):
+    domain = scrapy.Field()
+    title = scrapy.Field()
+    image_urls = scrapy.Field()
+    pass

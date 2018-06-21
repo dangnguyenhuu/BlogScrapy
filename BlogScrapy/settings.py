@@ -22,6 +22,13 @@ FEED_EXPORTERS = {
     'nejsonlines': 'BlogScrapy.exporters.NonEscapeJsonLinesItemExporter',
 }
 
+# 自作 pipeline に繋げる
+ITEM_PIPELINES = {'BlogScrapy.pipelines.MyImagesPipeline': 1}
+# データの保存場所
+IMAGES_STORE = '/Users/huudang/Documents/Images'
+# リンクを辿る深さを指定
+DEPTH_LIMIT = 5
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'BlogScrapy (+http://www.yourdomain.com)'
@@ -35,7 +42,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
